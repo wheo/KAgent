@@ -1,0 +1,84 @@
+﻿<Window x:Class="KAgent.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KAgent"
+        mc:Ignorable="d"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Title="KBS Agent" Height="1024" Width="1280" Loaded="Window_Loaded">
+    <Window.Resources>
+        <SolidColorBrush x:Key="CustomProgressBarBackgroundSolidColorBrushKey" Color="#55ffffff" />
+        <Style x:Key="NetworkProgressBarStyleKey" TargetType="{x:Type ProgressBar}">
+            <Setter Property="Height" Value="16" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="{StaticResource CustomProgressBarBackgroundSolidColorBrushKey}" />
+            <Setter Property="Minimum" Value="0" />
+            <Setter Property="Maximum" Value="100" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="97*" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="0" Background="Beige">
+        </StackPanel>
+        <DockPanel Grid.Row="1" Grid.Column="1">
+            <ListView x:Name="lvStatus" Background="AliceBlue" ScrollViewer.CanContentScroll="True" ScrollViewer.IsDeferredScrollingEnabled="True" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.Resources>
+                    <DataTemplate x:Key="myProgressCell">
+                        <Grid Margin="1">
+                            <ProgressBar Style="{DynamicResource NetworkProgressBarStyleKey}"
+                                Value="{Binding progress}"></ProgressBar>
+                            <TextBlock Foreground="White"  Text="{Binding progress,StringFormat={}{0:0}%}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate x:Key="myStart_at">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding start_at}" FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </DataTemplate>
+                    <DataTemplate x:Key="myEnd_at">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding end_at}" FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </DataTemplate>
+                    <DataTemplate x:Key="myFilepath">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding filepath}" FontSize="10" VerticalAlignment="Center" HorizontalAlignment="Left" />
+                        </StackPanel>
+                    </DataTemplate>
+                    <DataTemplate x:Key="myStatus">
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <TextBlock Text="{Binding status}" TextAlignment="Center" />
+                        </StackPanel>
+                    </DataTemplate>
+                    <DataTemplate x:Key="myApiStatus">
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <TextBlock Text="{Binding api_status}" TextAlignment="Center" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.Resources>
+                <ListView.View>
+                    <GridView AllowsColumnReorder="False">
+                        <GridViewColumn Header="시작시간" Width="140" CellTemplate="{StaticResource myStart_at}" />
+                        <GridViewColumn Header="종료시간" Width="140" CellTemplate="{StaticResource myEnd_at}" />
+                        <GridViewColumn Header="Time" Width="40" DisplayMemberBinding="{Binding elapsed}" />
+                        <GridViewColumn Header="타겟 FTP 주소" Width="600" CellTemplate="{StaticResource myFilepath}" />
+                        <GridViewColumn Header="고객사" Width="Auto" DisplayMemberBinding="{Binding customer}" />
+                        <GridViewColumn Header="진행률" Width="100" CellTemplate="{StaticResource myProgressCell}" />
+                        <GridViewColumn Header="파일 전송" Width="90" CellTemplate="{StaticResource myStatus}" />
+                        <GridViewColumn Header="API 전송" Width="90" CellTemplate="{StaticResource myApiStatus}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </DockPanel>
+    </Grid>
+</Window>
